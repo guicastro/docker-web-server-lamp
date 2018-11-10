@@ -10,7 +10,7 @@ services:
         restart: always
         volumes:
             #Document Root folder on your host with your sites
-            - "/path/to/your/www/folder:/var/www"
+            - "/Users/guilherme/Sites:/var/www"
             #Log folder
             - "./logs/apache2:/var/log/apache2"
             #Master Apache Conf
@@ -36,7 +36,7 @@ services:
             context: ./php71
         volumes:
             #Document Root folder on your host with your sites
-            - "/path/to/your/www/folder:/var/www"
+            - "/Users/guilherme/Sites:/var/www"
         ports:
             - 9000:9000
         networks:
@@ -49,7 +49,7 @@ services:
             context: ./php56
         volumes:
             #Document Root folder on your host with your sites
-            - "/path/to/your/www/folder:/var/www"
+            - "/Users/guilherme/Sites:/var/www"
         ports:
             - 9001:9000
         networks:
