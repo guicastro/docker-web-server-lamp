@@ -1,0 +1,3 @@
+mysql57/data/*
+logs/apache2/*.log
+logs/mysql57/*.log

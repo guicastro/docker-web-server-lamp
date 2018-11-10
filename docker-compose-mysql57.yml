@@ -1,0 +1,27 @@
+version: "3" 
+services:
+  mysql57:
+    container_name: mysql57
+    image: mysql:5.7
+    volumes:
+      #Data folder
+      - "./mysql57/data:/var/lib/mysql"
+      #Config file
+      - "./mysql57/etc:/etc/mysql"
+      #Logs folder
+      - "./logs/mysql57:/var/log/mysql"
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    environment:
+      #Root password
+      - MYSQL_ROOT_PASSWORD=XXXXXX
+      #Additional user/pass without root privilegies (optional)
+      - MYSQL_USER=XXXXXX
+      - MYSQL_PASSWORD=XXXXXXX
+    networks:
+        - web-server
+
+networks:
+    web-server:

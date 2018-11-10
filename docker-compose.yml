@@ -1,0 +1,59 @@
+version: "3"
+
+services:
+
+    #Apache container
+    apache:
+        container_name: apache
+        build:
+            context: ./apache2
+        restart: always
+        volumes:
+            #Document Root folder on your host with your sites
+            - "/path/to/your/www/folder:/var/www"
+            #Log folder
+            - "./logs/apache2:/var/log/apache2"
+            #Master Apache Conf
+            - "./apache2/conf-available/apache2.conf:/usr/local/apache2/conf/httpd.conf"
+        ports:
+            - 80:80
+            - 8080:8080
+            - 443:443
+        #Link to PHP containers
+        links:
+            - php71
+            - php56
+        #Link to MySQL container
+        external_links:
+            - mysql57
+        networks:
+            - web-server
+    
+    #PHP 7.1 container with FPM
+    php71:
+        container_name: php71
+        build:
+            context: ./php71
+        volumes:
+            #Document Root folder on your host with your sites
+            - "/path/to/your/www/folder:/var/www"
+        ports:
+            - 9000:9000
+        networks:
+            - web-server
+
+    #PHP 5.6 container with FPM
+    php56:
+        container_name: php56
+        build:
+            context: ./php56
+        volumes:
+            #Document Root folder on your host with your sites
+            - "/path/to/your/www/folder:/var/www"
+        ports:
+            - 9001:9000
+        networks:
+            - web-server
+
+networks:
+    web-server:
