@@ -4,7 +4,7 @@ LABEL maintainer "Guilherme Castro <guicastro@gmail.com>"
 
 RUN apt-get update
 
-RUN apt-get install -y zlib1g-dev libicu-dev g++ libmcrypt-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev unixodbc-dev libpq-dev
+RUN apt-get install -y zlib1g-dev libicu-dev g++ libmcrypt-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev unixodbc-dev libpq-dev tzdata
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl
 RUN docker-php-ext-install -j$(nproc) iconv
@@ -16,11 +16,16 @@ RUN docker-php-ext-install mbstring pdo mysqli pdo_mysql pdo_pgsql mcrypt
 ADD php56.ini /usr/local/etc/php/conf.d/php.ini
 
 RUN apt-get -y install locales
+
 # Set the locale
 RUN locale-gen pt_BR.utf8
-ENV LANG pt_BR.utf8
-ENV LANGUAGE pt_BR:fr
-ENV LC_ALL pt_BR.utf8
+RUN update-locale pt_BR.utf8
+
+RUN rm /etc/timezone
+# Set up your timezone
+RUN cp /usr/share/zoneinfo/America/Cuiaba /etc/localtime
+RUN echo "America/Cuiaba" > /etc/timezone
+RUN dpkg-reconfigure -f noninteractive tzdata
 
 ENTRYPOINT php-fpm --nodaemonize
 

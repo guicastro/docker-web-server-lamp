@@ -2,7 +2,9 @@ version: "3"
 services:
   mysql57:
     container_name: mysql57
-    image: mysql:5.7
+    build:
+        context: ./mysql57
+    restart: always
     volumes:
       #Data folder
       - "./mysql57/data:/var/lib/mysql"
@@ -10,10 +12,13 @@ services:
       - "./mysql57/etc:/etc/mysql"
       #Logs folder
       - "./logs/mysql57:/var/log/mysql"
+      #Optional host folder
+      - "/Users/guilherme/OneDrive/Clientes:/home/Clientes"
+      #Logrotate Conf
+      - "./logrotate/logrotate.conf:/etc/logrotate.conf"
+      - "./logrotate/mysql.conf:/etc/logrotate.d/mysql"
     ports:
       - "3306:3306"
-    expose:
-      - "3306"
     environment:
       #Root password
       - MYSQL_ROOT_PASSWORD=GUIGA84

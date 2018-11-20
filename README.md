@@ -31,7 +31,7 @@ To add more libraries in Apache, you need to edit Dockerfile on apache2 folder. 
 
 All Apache logs, including Access Log, Apache or PHP errors will be saved in logs/apache2 folder.
 
-## **Step by Step to up**
+## **Step by Step to up container**
 1. Download/pull this container and enter on root folder
 2. Run docker-composer -f docker-compose-mysql57.yml up -d to up MySQL Container
 3. Run docker-composer up -d to up Web Server
