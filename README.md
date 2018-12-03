@@ -1,8 +1,8 @@
-# Web Server Docker Container Apache/Multi PHP/MySQL for Mac
-This is a Docker Container compatible with macOS to up a webserver with:
+# Web Server Docker Container Apache/Multi PHP/MySQL/Oracle/SQL Server for Mac and Windows
+This is a Docker Container was tested on macOS 10.13 and Windows 10 to up a webserver with:
 - Apache 2 (latest) on debian
 - PHP 5.6 using FPM (latest release)
-- PHP 7.1 using FPM (latest release)
+- PHP 7.1 using FPM (latest release) with drivers to work with MySQL, PostgreeSQL, Oracle Database and MS SQL Server
 - MySQL 5.7 (latest release)
 
 ## YML Files and Instructions
@@ -31,8 +31,12 @@ To add more libraries in Apache, you need to edit Dockerfile on apache2 folder. 
 
 All Apache logs, including Access Log, Apache or PHP errors will be saved in logs/apache2 folder.
 
+This container uses a external repo to download, install and compile the Oracle Instant Client 12.2 and PDO Drivers. Only PHP 7.1 container has all PDO drivers to work with Oracle Database (PDO and OCI8), MS SQL Server (official PHP Driver), PostgreeSQL and MySQL. Thanks Caffeina Lab for Oracle Instant Client links (https://github.com/caffeinalab/php-fpm-oci8).
+
+This files was built in macOS environment. If you are using Windows, maybe necessary to disable EOL Git conversion or check EOL in all shell scripts (SH). In some cases, problems may occour to run shell scripts in Windows.
+
 ## **Step by Step to up container**
-1. Download/pull this container and enter on root folder
+1. Clone this repo (https://github.com/guicastro/docker-web-server-lamp) and enter on root folder
 2. Run docker-composer -f docker-compose-mysql57.yml up -d to up MySQL Container
 3. Run docker-composer up -d to up Web Server
 4. Access your server using http://localhost to PHP 7.1 and http://localhost:8080 to PHP 5.6
