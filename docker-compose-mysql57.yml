@@ -21,10 +21,10 @@ services:
       - "3306:3306"
     environment:
       #Root password
-      - MYSQL_ROOT_PASSWORD=GUIGA84
+      - MYSQL_ROOT_PASSWORD=XXXXXX
       #Additional user/pass without root privilegies (optional)
-      - MYSQL_USER=banco_dados
-      - MYSQL_PASSWORD=abcd1234
+      - MYSQL_USER=XXXXXX
+      - MYSQL_PASSWORD=XXXXXX
     networks:
         - web-server
 
