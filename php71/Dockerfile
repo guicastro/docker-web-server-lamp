@@ -2,10 +2,11 @@ FROM php:7.1-fpm
 
 LABEL maintainer "Guilherme Castro <guicastro@gmail.com>"
 
+#Update APT repository
 RUN apt-get update
 
 # Download and unzip Oracle Instant Client (from Caffeina Lab Repo)
-RUN apt-get -y install wget bsdtar libaio1 && \
+RUN apt-get -y install wget bsdtar libaio1 unzip && \
  wget -qO- https://raw.githubusercontent.com/caffeinalab/php-fpm-oci8/master/oracle/instantclient-basic-linux.x64-12.2.0.1.0.zip | bsdtar -xvf- -C /usr/local && \
  wget -qO- https://raw.githubusercontent.com/caffeinalab/php-fpm-oci8/master/oracle/instantclient-sdk-linux.x64-12.2.0.1.0.zip | bsdtar -xvf-  -C /usr/local && \
  wget -qO- https://raw.githubusercontent.com/caffeinalab/php-fpm-oci8/master/oracle/instantclient-sqlplus-linux.x64-12.2.0.1.0.zip | bsdtar -xvf- -C /usr/local && \
@@ -44,14 +45,11 @@ RUN pecl install sqlsrv pdo_sqlsrv
 RUN docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/local/instantclient
 RUN docker-php-ext-configure pdo_oci --with-pdo_oci=instantclient,/usr/local/instantclient,12.1
 
-#Install all PDO drivers for PHP
-RUN docker-php-ext-install mbstring pdo oci8 mysqli pdo_mysql pdo_pgsql pdo_oci mcrypt
+#Install all PDO drivers for PHP and other extensions
+RUN docker-php-ext-install mbstring pdo oci8 mysqli pdo_mysql pdo_pgsql pdo_oci mcrypt zip
 
 #Enable Oracle Instant Client and MS SQL Server extension for PHP
-RUN docker-php-ext-enable oci8 sqlsrv pdo_sqlsrv
-
-#Delete temporary files
-RUN rm -rf /var/lib/apt/lists/*
+RUN docker-php-ext-enable oci8 sqlsrv pdo_sqlsrv mcrypt
    
 #Copy PHP.INI conf
 ADD php71.ini /usr/local/etc/php/conf.d/php.ini
@@ -66,10 +64,17 @@ RUN cp /usr/share/zoneinfo/America/Cuiaba /etc/localtime
 RUN echo "America/Cuiaba" > /etc/timezone
 RUN dpkg-reconfigure -f noninteractive tzdata
 
+#Delete temporary files
+RUN rm -rf /var/lib/apt/lists/*
 
+#Run php-fpm
 ENTRYPOINT php-fpm --nodaemonize
 
-VOLUME /var/www
+#Get and Install Composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && php composer-setup.php && rm composer-setup.php && mv composer.phar /usr/local/bin/composer && chmod a+x /usr/local/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER 1
 
+#Set workdir as /var/www
+VOLUME /var/www
 WORKDIR /var/www
 
