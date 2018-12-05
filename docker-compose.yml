@@ -29,6 +29,8 @@ services:
         #Link to MySQL container
         external_links:
             - mysql57
+        depends_on:
+            - php71
         networks:
             - web-server
     
