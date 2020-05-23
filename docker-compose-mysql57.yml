@@ -1,5 +1,7 @@
-version: "3" 
+version: "3"
+
 services:
+<<<<<<< HEAD
   mysql57:
     container_name: mysql57
     build:
@@ -27,6 +29,36 @@ services:
       - MYSQL_PASSWORD=XXXXXX
     networks:
         - web-server
+=======
+>>>>>>> guilherme
 
+    #MySQL 5.7 Container
+    mysql57:
+        container_name: mysql57
+        build:
+            context: ./mysql57
+        restart: always
+        volumes:
+            #Data folder
+            - "./mysql57/data:/var/lib/mysql"
+            #Config file
+            - "./mysql57/etc:/etc/mysql"
+            #Logs folder
+            - "./logs/mysql57:/var/log/mysql"
+            #Optional host folder
+            - "/Users/guilherme/OneDrive/Clientes:/home/Clientes:rw"
+            #Logrotate Conf
+            - "./logrotate/logrotate.conf:/etc/logrotate.conf"
+            - "./logrotate/mysql.conf:/etc/logrotate.d/mysql"
+        ports:
+            - "3306:3306"
+        environment:
+            #Root password
+            - MYSQL_ROOT_PASSWORD=GUIGA84
+            #Additional user/pass without root privilegies (optional)
+            - MYSQL_USER=banco_dados
+            - MYSQL_PASSWORD=abcd1234
+        networks:
+            - web-server   
 networks:
     web-server:
