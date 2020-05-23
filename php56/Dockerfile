@@ -14,7 +14,7 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
 RUN docker-php-ext-install -j$(nproc) gd
 
 #Install all PDO drivers for PHP and other extensions
-RUN docker-php-ext-install mbstring pdo mysqli pdo_mysql pdo_pgsql mcrypt zip
+RUN docker-php-ext-install mbstring pdo mysql mysqli pdo_mysql pdo_pgsql mcrypt zip exif
 
 #Copy PHP.INI conf
 ADD php56.ini /usr/local/etc/php/conf.d/php.ini

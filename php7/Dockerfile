@@ -1,4 +1,4 @@
-FROM php:7.1-fpm
+FROM php:7.2-fpm
 
 LABEL maintainer "Guilherme Castro <guicastro@gmail.com>"
 
@@ -22,7 +22,7 @@ ENV ACCEPT_EULA=Y
 ENV SERVER_TYPE=LOCAL
 
 #Install main libraries
-RUN apt-get install -y apt-transport-https gnupg zlib1g-dev libicu-dev g++ libmcrypt-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev unixodbc-dev libpq-dev tzdata locales
+RUN apt-get install -y apt-transport-https gnupg zlib1g-dev libicu-dev libmcrypt-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev unixodbc-dev libpq-dev tzdata locales
 
 #Download Microsoft SQL Server Driver for PHP
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
@@ -39,20 +39,20 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
 RUN docker-php-ext-install -j$(nproc) gd
 
 #Install MS SQL Server extension
-RUN pecl install sqlsrv pdo_sqlsrv
+RUN pecl install sqlsrv pdo_sqlsrv mcrypt-1.0.1
 
 #Configure and Compile Oracle Instant Client for PHP, with OCI8 and PDO
 RUN docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/local/instantclient
 RUN docker-php-ext-configure pdo_oci --with-pdo_oci=instantclient,/usr/local/instantclient,12.1
 
 #Install all PDO drivers for PHP and other extensions
-RUN docker-php-ext-install mbstring pdo oci8 mysqli pdo_mysql pdo_pgsql pdo_oci mcrypt zip
+RUN docker-php-ext-install mbstring pdo oci8 mysqli pdo_mysql pdo_pgsql pdo_oci zip exif
 
 #Enable Oracle Instant Client and MS SQL Server extension for PHP
 RUN docker-php-ext-enable oci8 sqlsrv pdo_sqlsrv mcrypt
    
 #Copy PHP.INI conf
-ADD php71.ini /usr/local/etc/php/conf.d/php.ini
+ADD php7.ini /usr/local/etc/php/conf.d/php.ini
 
 # Set the locale
 RUN locale-gen pt_BR.utf8

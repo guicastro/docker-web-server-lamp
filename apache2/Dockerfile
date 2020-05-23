@@ -22,6 +22,7 @@ RUN dpkg-reconfigure -f noninteractive tzdata
 
 #Remove all default Apache Conf
 RUN rm /etc/apache2/sites-enabled/*
+RUN rm /etc/apache2/sites-available/*
 
 #Copy conf files
 ADD conf-available /etc/apache2/conf-available
